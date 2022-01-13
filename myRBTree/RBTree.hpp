@@ -135,10 +135,7 @@ V RBTree<K, V>::search(const K& key) {
     }
 }
 
-/* 
- * 对红黑树的节点(x)进行左旋转
- *
- * 左旋示意图(对节点x进行左旋)：
+/* 左旋示意图(对节点x进行左旋)：
  *     px                              px
  *     /                               /
  *    x                               y
@@ -178,7 +175,7 @@ void RBTree<K, V>::leftRotate(RBTNode<K, V>*& root, RBTNode<K, V>* x) {
     }
 }
 
-/* 右旋示意图(对节点y进行左旋)：
+/* 右旋示意图(对节点y进行右旋)：
  *            py                              py
  *           /                               /
  *          y                               x
@@ -369,32 +366,33 @@ void RBTree<K, V>::remove(RBTNode<K, V>*& root, RBTNode<K, V>* node) {
 
 template<class K, class V>
 void RBTree<K, V>::removeFixUp(RBTNode<K, V>*& root, RBTNode<K, V>* node) {
-    while (node != root && colorOf(node) == Color::BLACK) {
-        if (node == node->_parent->_left) {
+    while (node != root && colorOf(node) == Color::BLACK) { // 删除的是黑色节点，黑高不平衡
+        if (node == node->_parent->_left) { // 删除节点为父节点的左孩子情况
             RBTNode<K, V>* rnode = node->_parent->_right;
-            if (colorOf(rnode) == Color::RED) {
+            if (colorOf(rnode) == Color::RED) { // case1：兄弟节点为红色
                 rnode->_color = Color::BLACK;
                 node->_parent->_color = Color::RED;
                 leftRotate(root, node->_parent);
                 rnode = node->_parent->_right;
             }
-            if (colorOf(rnode->_left) == Color::BLACK && colorOf(rnode->_right) == Color::BLACK) {
+            if (colorOf(rnode->_left) == Color::BLACK && colorOf(rnode->_right) == Color::BLACK) { // case2：兄弟节点为黑色，左右侄子节点为黑色
                 rnode->_color = Color::RED;
                 node = node->_parent;
             } else {
-                if (colorOf(rnode->_right) == Color::BLACK) {
+                if (colorOf(rnode->_right) == Color::BLACK) { // case3：兄弟节点为黑色，左侄子节点为红色，右侄子节点为黑色
                     rnode->_left->_color = Color::BLACK;
                     rnode->_color = Color::RED;
                     rightRotate(root, rnode);
                     rnode = node->_parent->_right;
                 }
+                // case4：兄弟节点为黑色，右侄子节点为红色。
                 rnode->_color = rnode->_parent->_color;
                 node->_parent->_color = Color::BLACK;
                 rnode->_right->_color = Color::BLACK;
                 leftRotate(root, node->_parent);
                 node = root;
             }
-        } else {
+        } else { // 删除节点为父节点的右孩子情况
             RBTNode<K, V>* rnode = node->_parent->_left;
             if (colorOf(rnode) == Color::RED) {
                 rnode->_color = Color::BLACK;
@@ -420,7 +418,7 @@ void RBTree<K, V>::removeFixUp(RBTNode<K, V>*& root, RBTNode<K, V>* node) {
             }
         }
     }
-    node->_color = Color::BLACK;
+    node->_color = Color::BLACK; // 如果当前节点是根节点或者是红色节点，直接置黑
 }
 
 template<class K, class V>

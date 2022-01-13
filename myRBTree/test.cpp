@@ -1,44 +1,48 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include<ctime>
 #include "RBTree.hpp"
 
 using namespace std;
 using namespace myRBTree;
 
 int main() {
-    RBTree<char, int> tree;
-    char c1 = 'a';
-    for (int i = 0; i != 26; ++i) {
+
+    vector <pair<int, int>> vec;
+    for (int i = 0; i != 1000; ++i) {
+        vec.push_back({i, i});
+    }
+    random_shuffle(vec.begin(), vec.end());
+
+    RBTree<int, int> tree;
+    for (vector<int>::size_type i = 0; i != vec.size(); ++i) {
+        tree.insert(vec[i].first, vec[i].second);
         if (!tree.isRBTree()) {
-            throw RBTException("this tree is not a rbtree.");
-        } else {
-            tree.insert(c1, i);
-            ++c1;
+            throw RBTException("this tree is not a rbtree");
         }
     }
     tree.inOrder();
     cout << endl;
 
-    char c2 = 'a';
-    for (int i = 0; i != 26; ++i) {
-        cout << tree.search(c2) << endl;
-        ++c2;
+    random_shuffle(vec.begin(), vec.end());
+    clock_t startTime,endTime;
+    startTime = clock();
+    for (vector<int>::size_type i = 0; i != vec.size(); ++i) {
+        tree.search(vec[i].first);
     }
+    endTime = clock();
+    cout << "The run time is: " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << endl;
 
-    RBTree<char, int> tree2(tree);
-    std::cout << (tree2 == tree) << endl;
-    char c3 = 'h';
-    for (int i = 0; i != 12; ++i) {
+    random_shuffle(vec.begin(), vec.end());
+    for (vector<int>::size_type i = 0; i != vec.size(); ++i) {
+        tree.remove(vec[i].first);
         if (!tree.isRBTree()) {
-            throw RBTException("this tree is not a rbtree.");
-        } else {
-            tree2.remove(c3);
-            ++c3;
+            throw RBTException("this tree is not a rbtree");
         }
     }
     
-    RBTree<char, int> tree3;
-    tree3 = tree;
-    std::cout << (tree3 != tree2) << endl;
-    cout << tree3;
+    cout << (tree.getRoot() == nullptr) << endl;
+
     return 0;
 }

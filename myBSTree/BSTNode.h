@@ -12,5 +12,5 @@ struct BSTNode {
     BSTNode(T data, BSTNode<T> *left = nullptr, BSTNode<T> *right = nullptr) :
                 _data(data), _left(left), _right(right) { } // 构造函数
 };
-    
+
 }

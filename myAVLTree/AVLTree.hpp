@@ -38,11 +38,11 @@ public:
         }
     }
 
-    bool operator==(AVLTree<T>& rhs) {
+    bool operator==(AVLTree<T>& rhs) { // 判断是否相等
         return (equal(this->getRoot(), rhs.getRoot()));
     }
 
-    bool operator!=(AVLTree<T>& rhs) {
+    bool operator!=(AVLTree<T>& rhs) { // 判断是否不相等
         return !(*this == rhs);
     }
 
@@ -87,6 +87,9 @@ public:
     void remove(const T& x) { // 删除节点
         AVLTNode<T>* z = search(_root, x);
         remove(_root, z);
+        // if (z != nullptr) {
+        //     _root = remove(_root, z);
+        // }
     }
 
     AVLTNode<T>* search(const T& x) { // 搜索节点
@@ -113,9 +116,13 @@ public:
         printAVL(_root, 0);
     }
 
+    bool isBalance() {
+        return isBalance(_root);
+    }
+
 protected:
 
-    AVLTNode<T>* search(AVLTNode<T>*& subTree, const T& x) {
+    AVLTNode<T>* search(AVLTNode<T>*& subTree, const T& x) { // 搜索节点
         if (subTree == nullptr) {
             throw AVLTException("this node could not be found.");
         } else if (subTree->_data == x) {
@@ -151,7 +158,7 @@ protected:
         }
     }
 
-    void destroy(AVLTNode<T>*& subTree) {
+    void destroy(AVLTNode<T>*& subTree) { // 销毁二叉树
         if (subTree != nullptr) {
             destroy(subTree->_left);
             destroy(subTree->_right);
@@ -160,7 +167,7 @@ protected:
         }
     }
 
-    AVLTNode<T>* copy(AVLTNode<T>* orginNode) {
+    AVLTNode<T>* copy(AVLTNode<T>* orginNode) { // 拷贝二叉树
         if (orginNode == nullptr) {
             return nullptr;
         }
@@ -172,7 +179,7 @@ protected:
         return temp;
     }
 
-    bool equal(AVLTNode<T>* lhs, AVLTNode<T>* rhs) {
+    bool equal(AVLTNode<T>* lhs, AVLTNode<T>* rhs) { // 判断是否相等
         if (lhs == nullptr && rhs == nullptr) {
             return true;
         }
@@ -189,7 +196,7 @@ protected:
      *    /  \                 /  \
      *   x    y               y    z
      */
-    AVLTNode<T>* leftLeftRotation(AVLTNode<T>*& k2) {
+    AVLTNode<T>* leftLeftRotation(AVLTNode<T>*& k2) { // LL旋转
         AVLTNode<T>* k1 = k2->_left;
         k2->_left = k1->_right;
         k1->_right = k2;
@@ -205,7 +212,7 @@ protected:
      *        /  \        /  \   
      *       y    z      x    y  
      */
-    AVLTNode<T>* rightRightRotation(AVLTNode<T>*& k1) {
+    AVLTNode<T>* rightRightRotation(AVLTNode<T>*& k1) { // RR旋转
         AVLTNode<T>* k2 = k1->_right;
         k1->_right = k2->_left;
         k2->_left = k1;
@@ -223,7 +230,7 @@ protected:
      *       /  \       /  \
      *      B    C     A    B
      */
-    AVLTNode<T>* leftRightRotation(AVLTNode<T>*& k3) {
+    AVLTNode<T>* leftRightRotation(AVLTNode<T>*& k3) { // LR旋转
         k3->_left = rightRightRotation(k3->_left);
         return leftLeftRotation(k3);
     }
@@ -237,12 +244,12 @@ protected:
      *     /  \                  /  \
      *    B    D                C     D
      */
-    AVLTNode<T>* rightLeftRotation(AVLTNode<T>*& k1) {
+    AVLTNode<T>* rightLeftRotation(AVLTNode<T>*& k1) { // RR旋转
         k1->_right = leftLeftRotation(k1->_right);
         return rightRightRotation(k1);
     }
 
-    AVLTNode<T>* maximum(AVLTNode<T>* subTree) {
+    AVLTNode<T>* maximum(AVLTNode<T>* subTree) { // 找出最大节点（最右节点）
         if (subTree == nullptr) {
             return nullptr;
         }
@@ -252,7 +259,7 @@ protected:
         return subTree;
     }
 
-    AVLTNode<T>* minimum(AVLTNode<T>* subTree) {
+    AVLTNode<T>* minimum(AVLTNode<T>* subTree) { // 找出最小节点（最左节点）
         if (subTree == nullptr) {
             return nullptr;
         }
@@ -262,7 +269,7 @@ protected:
         return subTree;
     }
 
-    void insert(AVLTNode<T>*& subTree, const T& x) {
+    void insert(AVLTNode<T>*& subTree, const T& x) { // 插入
         if (subTree == nullptr) {
             subTree = new AVLTNode<T>(x);
             if (subTree == nullptr) {
@@ -270,6 +277,7 @@ protected:
             }
         } else if (x < subTree->_data) {
             insert(subTree->_left, x);
+            subTree->_height = std::max(height(subTree->_left), height(subTree->_right)) + 1;
             if (height(subTree->_left) - height(subTree->_right) == 2) {
                 if (x < subTree->_left->_data) {
                     subTree = leftLeftRotation(subTree);
@@ -279,6 +287,7 @@ protected:
             } 
         } else if (x >= subTree->_data) {
             insert(subTree->_right, x);
+            subTree->_height = std::max(height(subTree->_left), height(subTree->_right)) + 1;
             if (height(subTree->_right) - height(subTree->_left) == 2) {
                 if (x > subTree->_right->_data) {
                     subTree = rightRightRotation(subTree);
@@ -289,10 +298,12 @@ protected:
         } else {
             throw AVLTException("node already exists, insertion failed.");
         }
-        subTree->_height = std::max(height(subTree->_left), height(subTree->_right)) + 1;
     }
 
-    void remove(AVLTNode<T>*& subTree, AVLTNode<T>*& z) {
+    void remove(AVLTNode<T>*& subTree, AVLTNode<T>*& z) { // 删除
+        if (subTree == nullptr || z == nullptr) {
+            return;
+        }
         if (z->_data < subTree->_data) { // 待删除的节点在subTree的左子树中
             remove(subTree->_left, z);
             if (height(subTree->_right) - height(subTree->_left) == 2) { // 删除节点后，若AVL树失去平衡，则进行相应的调节
@@ -307,10 +318,10 @@ protected:
             remove(subTree->_right, z);
             if (height(subTree->_left) - height(subTree->_right) == 2) { // 删除节点后，若AVL树失去平衡，则进行相应的调节
                 AVLTNode<T>* l = subTree->_left;
-                if (height(l->_left) > height(l->_right)) {
-                    subTree = leftLeftRotation(subTree);
-                } else {
+                if (height(l->_left) < height(l->_right)) {
                     subTree = leftRightRotation(subTree);
+                } else {
+                    subTree = leftLeftRotation(subTree);
                 }
             }
         } else { // subTree就是要删除的节点
@@ -343,7 +354,7 @@ protected:
             }
         }
         if (subTree != nullptr) {
-            subTree->_height = std::max( height(subTree->_left), height(subTree->_right)) + 1;
+            subTree->_height = std::max(height(subTree->_left), height(subTree->_right)) + 1;
         }
     }
 
@@ -359,7 +370,7 @@ protected:
         printAVL(subTree->_left, nLayer + 1);
     }
 
-    std::size_t size(AVLTNode<T>* subTree) {
+    std::size_t size(AVLTNode<T>* subTree) { // 节点个数
         if (subTree != nullptr) {
             return 1 + size(subTree->_left) + size(subTree->_right);
         } else {
@@ -367,8 +378,15 @@ protected:
         }
     }
 
-    int height(AVLTNode<T>* subTree) {
+    int height(AVLTNode<T>* subTree) { // 树的高度
         return subTree == nullptr ? 0 : subTree->_height;
+    }
+
+    bool isBalance(AVLTNode<T>* subTree) { // 是否平衡
+        if (subTree == nullptr) {
+            return true;;
+        }
+        return (std::abs(height(subTree->_left) - height(subTree->_right)) <= 1 && isBalance(subTree->_left) && isBalance(subTree->_right));
     }
 
 private:

@@ -1,50 +1,45 @@
+#include <vector>
+#include <algorithm>
+#include <ctime>
 #include "AVLTree.hpp"
 
 using namespace std;
 using namespace myAVLTree;
 
 int main() {
+    vector <int> vec;
+    for (int i = 0; i != 1000; ++i) {
+        vec.push_back(i);
+    }
+    random_shuffle(vec.begin(), vec.end());
+
     AVLTree<int> tree;
-    tree.insert(3);
-    tree.insert(2);
-    tree.insert(1);
-    tree.insert(4);
-    tree.insert(5);
-    tree.insert(6);
-    tree.insert(7);
-    tree.insert(16);
-    tree.insert(15);
-    tree.insert(14);
-    tree.insert(13);
-    tree.insert(12);
-    tree.insert(11);
-    tree.insert(10);
-    tree.insert(8);
-    tree.insert(9);
+    for (vector<int>::size_type i = 0; i != vec.size(); ++i) {
+        tree.insert(vec[i]);
+        if (!tree.isBalance()) {
+            throw AVLTException("this tree is not a alvtree");
+        }
+    }
     tree.inOrder();
     cout << endl;
+
+    random_shuffle(vec.begin(), vec.end());
+    clock_t startTime, endTime;
+    startTime = clock();
+    for (vector<int>::size_type i = 0; i != vec.size(); ++i) {
+        tree.search(vec[i]);
+    }
+    endTime = clock();
+    cout << "The run time is: " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" << endl;
     
-
-    AVLTree<int> tree1(tree);
-    tree1.remove(8);
-    tree1.remove(13);
-    tree1.inOrder();
-    cout << endl;
-
-    AVLTree<int> tree2;
-    tree2 = tree1;
-    tree2.insert(8);
-    tree2.insert(13);
-    
-    tree2.inOrder();
-    cout << endl;
-    cout << tree2.search(11)->_data << endl;
-    cout << tree1;
-
-    AVLTree<int> tree3 = tree;
-    cout << (tree3 == tree ? "true" : "false") << " " << (tree3 != tree ? "true" : "false") << endl;
-    cout << (tree3 == tree1 ? "true" : "false") << " " << (tree3 != tree1 ? "true" : "false") << endl;
-    cout << tree.size() << " " << tree3.getRoot()->_left->_height << endl;
+    random_shuffle(vec.begin(), vec.end());
+    for (vector<int>::size_type i = 0; i != vec.size(); ++i) {
+        tree.remove(vec[i]);
+        if (!tree.isBalance()) {
+            throw AVLTException("this tree is not a alvtree");
+        }
+    }
+    cout << (tree.empty() ? "tree is empty" : "tree is not empty") << endl;
 
     return 0;
 }
