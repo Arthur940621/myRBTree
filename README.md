@@ -9,7 +9,7 @@
 
 它有五种基本形态：
 
-![001]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/001.png)
 
 ## 性质
 
@@ -27,7 +27,7 @@
 
 满二叉树的示意图如下：
 
-![002]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/002.png)
 
 # 完全二叉树
 
@@ -37,7 +37,7 @@
 
 完全二叉树的示意图如下：
 
-![003]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/003.png)
 
 ## 性质
 
@@ -81,7 +81,7 @@
 
 有两个子节点的，需要找到替代节点（替代节点就是前驱节点或者后继节点）。
 
-![004]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/004.png)
 
 # 平衡二叉排序树
 
@@ -108,11 +108,11 @@
 
 `LL`（左左），`LR`（左右），`RR`（右右）和 `RL`（右左）：
 
-![005]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/005.png)
 
 除了上面的情况之外，还有其它的失去平衡的衡二叉排序树，如下图：
 
-![006]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/006.png)
 
 失去平衡时的情况一定是 `LL`、`LR`、`RL`、`RR` 这 `4` 种之一，它们都由各自的定义：
 
@@ -136,7 +136,7 @@
 
 `LL` 失去平衡的情况，可以通过一次旋转恢复平衡。如下图：
 
-![007]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/007.png)
 
 实现代码：
 
@@ -160,7 +160,7 @@ AVLTNode<T>* leftLeftRotation(AVLTNode<T>*& k2) {
 
 `RR` 的旋转与 `LL` 对称：
 
-![008]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/008.png)
 
 实现代码：
 
@@ -184,7 +184,7 @@ AVLTNode<T>* rightRightRotation(AVLTNode<T>*& k1) {
 
 `LR` 失去平衡的情况，需要经过两次旋转才能恢复平衡。如下图：
 
-![009]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/009.png)
 
 第一次旋转是围绕 `k1` 进行的 `RR` 旋转，第二次是围绕 `k3` 进行的 `LL` 旋转。
 
@@ -208,7 +208,7 @@ AVLTNode<T>* leftRightRotation(AVLTNode<T>*& k3) {
 
 `RL` 与 `LR` 对称：
 
-![010]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/010.png)
 
 实现代码：
 
@@ -368,7 +368,7 @@ void remove(AVLTNode<T>*& subTree, AVLTNode<T>*& z) { // 删除
 
 下图是一个 `2-3-4` 树：
 
-![011]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/011.png)
 
 ## 插入
 
@@ -380,7 +380,7 @@ void remove(AVLTNode<T>*& subTree, AVLTNode<T>*& z) { // 删除
 
 `2-3-4` 树都是自下向上生长的：
 
-![012]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/012.png)
 
 ## 删除：
 
@@ -395,7 +395,7 @@ void remove(AVLTNode<T>*& subTree, AVLTNode<T>*& z) { // 删除
 
 如果是在 `2节点`（叶子节点）中进行删除，每次删除会减少一个分支，如果删除操作导致根节点参与合并，则 `2-3-4` 树会降低一层。
 
-![013]()
+![](https://raw.githubusercontent.com/Arthur940621/image/main/Project/RBTree/013.png)
 
 `2-3-4` 树的查询操作像普通的二叉搜索树一样，非常简单，但由于其结点元素数不确定，在一些编程语言中实现起来并不方便，实现一般使用它的等同——红黑树。
 
