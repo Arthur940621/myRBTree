@@ -172,6 +172,7 @@ protected:
                 f->_right = p->_right; // 将p的右子树链到f的右链上
             }
             delete p; // 释放被删除的节点p
+            p = nullptr;
         } else { // p有左子树
             q = p;
             s = p->_left;
@@ -186,6 +187,7 @@ protected:
             }
             p->_data = s->_data;
             delete s;
+            s = nullptr;
         }
     }
 

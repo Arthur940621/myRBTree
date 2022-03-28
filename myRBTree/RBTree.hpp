@@ -362,6 +362,7 @@ void RBTree<K, V>::remove(RBTNode<K, V>*& root, RBTNode<K, V>* node) {
         }
     }
     delete node;
+    node = nullptr;
 }
 
 template<class K, class V>

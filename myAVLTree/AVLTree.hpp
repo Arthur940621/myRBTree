@@ -351,6 +351,7 @@ protected:
                 AVLTNode<T>* temp = subTree;
                 subTree = (subTree->_left == nullptr) ? subTree->_right : subTree->_left;
                 delete temp;
+                temp = nullptr;
             }
         }
         if (subTree != nullptr) {
