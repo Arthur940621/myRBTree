@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include<ctime>
+#include <ctime>
 #include "RBTree.hpp"
 
 using namespace std;
